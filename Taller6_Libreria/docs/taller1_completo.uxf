@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>296</x>
+      <y>40</y>
+      <w>408</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>Libreria
+--
+
+--
++Libreria(String nombreArchivoCategorias, String nombreArchivoLibros): ctor
++darCategorias(): Categoria[]
++darLibros(): ArrayList&lt;Libro&gt;
+-cargarCategorias(String nombreArchivoCategorias): Categoria[]
+-cargarCatalogo(String nombreArchivoLibros): ArrayList&lt;Libro&gt;
+-buscarCategoria(String nombreCategoria): Categoria
+-existeArchivo(String nombreArchivo): boolean
++darLibros(String nombreCategoria): ArrayList&lt;Libro&gt;
++buscarLibro(String tituloLibro): Libro
++buscarLibrosAutor(String cadenaAutor): ArrayList&lt;Libro&gt;
++buscarCategoriasAutor(String nombreAutor): ArrayList&lt;Categoria&gt;
++calificacionPromedio(): double
++categoriaConMasLibros(): Categoria
++categoriaConMejoresLibros(): Categoria
++contarLibrosSinPortada(): int
++hayAutorEnVariasCategorias(): boolean
+
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>552</x>
+      <y>336</y>
+      <w>456</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>Libro
+--
+-titulo: String
+-autor: String
+-calificacion: double
+--
++Libro(String elTitulo, String elAutor, double laCalificacion, Categoria laCategoria): ctor
++darTitulo(): String
++darAutor(): String
++darCalificacion(): double
++darCategoria(): Categoria
++darPortada(): Imagen
++cambiarPortada(Imagen nuevaPortada): void
++tienePortada(): boolean
++toString(): String
+
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>336</y>
+      <w>328</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>Categoria
+--
+-nombre: String
+-ficcion: boolean
+--
++Categoria(String nombre, boolean ficcion): ctor
++darNombre(): String
++esFiccion(): boolean
++darLibros(): ArrayList&lt;Libro&gt;
++agregarLibro(Libro nuevoLibro): void
++contarLibrosEnCategoria(): int
++calificacionPromedio(): double
++hayLibroDeAutor(String nombreAutor): boolean
++buscarLibrosDeAutor(String nombreAutor): ArrayList&lt;Libro&gt;
++toString(): String
+
+
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>552</y>
+      <w>296</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>Imagen
+--
+-rutaArchivo: String
+-ancho: int
+-alto: int
+--
++Imagen(String rutaArchivo, int ancho, int alto): ctor
++darRutaArchivo(): String
++darAncho(): int
++darAlto(): int
+
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>776</x>
+      <y>504</y>
+      <w>64</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1
+r1=portada
+</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>416</x>
+      <y>408</y>
+      <w>152</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+r1=categoria
+</panel_attributes>
+    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>416</x>
+      <y>464</y>
+      <w>152</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+r1=libros
+</panel_attributes>
+    <additional_attributes>170.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>624</x>
+      <y>280</y>
+      <w>64</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+r1=catalogo
+</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>280</y>
+      <w>72</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+r1=categorias
+</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
