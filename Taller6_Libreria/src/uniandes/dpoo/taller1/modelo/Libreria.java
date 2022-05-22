@@ -257,40 +257,105 @@ public class Libreria
 		File archivo = new File("./data/" + nombreArchivo);
 		return archivo.exists();
 	}
-
+	
 	/**
-	 * Retorna una lista con los libros que pertenecen a la categor√≠a indicada en el
-	 * par√°metro
+	 * Verifica si todos los autores tienen libros registrados en la librerÌa.
 	 * 
-	 * @param nombreCategoria El nombre de la categor√≠a de inter√©s
-	 * @return Una lista donde todos los libros pertenecen a la categor√≠a indicada
+	 * @param nombresAutores Los nombres de los autores separados por comas.
+	 * @return HashMap<String, String> Mapa con los autores que no tienen libros registrados.
 	 */
-	public ArrayList<Libro> darLibros(String nombreCategoria)
+	public HashMap<String, String> existenAutores(String nombresAutores)
 	{
-		boolean encontreCategoria = false;
-
-		ArrayList<Libro> seleccionados = new ArrayList<Libro>();
-
-		for (int i = 0; i < categorias.length && !encontreCategoria; i++)
+		HashMap<String, String> mapaAutoresNoExisten = new HashMap<String, String>();
+		String[] listaAutores = nombresAutores.split(",");
+		
+		for (String autor : listaAutores)
 		{
-			if (categorias[i].darNombre().equals(nombreCategoria))
+			mapaAutoresNoExisten.put(autor,autor);
+		}
+		
+		for (Libro libro: catalogo)
+		{
+			String nombreAutor = libro.darAutor();
+			for (String autor : listaAutores)
 			{
-				encontreCategoria = true;
-				seleccionados.addAll(categorias[i].darLibros());
+				if (nombreAutor.equals(autor))
+				{
+					mapaAutoresNoExisten.remove(autor);
+				}
 			}
 		}
-
-		return seleccionados;
+		
+		return mapaAutoresNoExisten;
 	}
-
+	
+	/**
+	 *	Elimina todos los libros de los autores.
+	 * 
+	 * @param nombresAutores Los nombres de los autores separados por comas.
+	 * @return int N˙mero de libros eliminados.
+	 */
+	public int eliminarLibros(String nombresAutores)
+	{
+		int numLibrosEliminados = 0;
+		String[] listaAutores = nombresAutores.split(",");
+		
+		for (int i = 0; i < catalogo.size(); i++)
+		{
+			Libro libro = catalogo.get(i);
+			String titulo = libro.darTitulo();
+			String nombreAutor = libro.darAutor();
+			Categoria categoria = libro.darCategoria();
+			double calificacion = libro.darCalificacion();
+			
+			try {
+				for (String autor : listaAutores)
+				{
+					//Susan Sontag,Stephen Rogers Peck
+					
+					if (nombreAutor.equals(autor))
+					{
+						ArrayList<Libro> listaLibros = categoria.darLibros();
+				
+						boolean eliminado = false;
+						
+						for (int j = 0; j < listaLibros.size() && !eliminado; j++)
+						{
+							Libro libroCategoria = listaLibros.get(j);
+							
+							if(libroCategoria.equals(libro))
+							{
+								listaLibros.remove(j);
+							}
+						}
+						
+						catalogo.remove(i);
+						numLibrosEliminados += 1;
+						i--;
+					}
+				}
+			}
+			catch(Exception e) {
+				String mensaje = "No se pudo borrar el siguiente libro:" + System.lineSeparator();
+				mensaje += "Titulo: " + titulo + System.lineSeparator();
+				mensaje += "Autor: " + nombreAutor + System.lineSeparator();
+				mensaje += "CategorÌa: " + categoria.darNombre() + System.lineSeparator();
+				mensaje += "CalificaciÛn: " + String.valueOf(calificacion);
+				JOptionPane.showMessageDialog(null,mensaje);
+			}
+		}
+		
+		return numLibrosEliminados;
+	}
+	
 	/**
 	 * Retorna la posiciÛn de la categorÌa ingresada por el usuario en el arreglo
 	 * de la librerÌa.
 	 * 
 	 * Si no se encuentra la categorÌa, entonces se retorna -1.
 	 * 
-	 * @param nombreCategoria El nombre de la categor√≠a
-	 * @return La posiciÛn de la categorÌa en el arreglo de la librerÌa
+	 * @param nombreCategoria El nombre de la categor√≠a.
+	 * @return La posiciÛn de la categorÌa en el arreglo de la librerÌa.
 	 */
 	public int buscarPosCategoria(String nombreCategoria)
 	{
@@ -315,9 +380,9 @@ public class Libreria
 	 * el renombramiento no se lleva a cabo.
 	 * 
 	 * @param nombreCategoria La posiciÛn de la categorÌa a reenombrar en el arreglo
-	 * de la librerÌa
-	 * @param NuevoNombreCat El nuevo nombre de la categorÌa
-	 * @return Booleano que indica si fue posible cambiar el nombre de la categorÌa
+	 * de la librerÌa.
+	 * @param NuevoNombreCat El nuevo nombre de la categorÌa.
+	 * @return Booleano que indica si fue posible cambiar el nombre de la categorÌa.
 	 */
 	public boolean renombrarCategoria(int posCategoria, String NuevoNombreCat) 
 	{
@@ -336,7 +401,6 @@ public class Libreria
 			Categoria viejaCategoria = categorias[posCategoria];
 			String nomViejaCategoria = viejaCategoria.darNombre();
 			boolean FiccionCategoria = viejaCategoria.esFiccion();
-			ArrayList<Libro> librosVijaCategoria = viejaCategoria.darLibros();
 			Categoria nuevaCategoria = new Categoria(NuevoNombreCat, FiccionCategoria);
 			categorias[posCategoria] = nuevaCategoria;
 			
@@ -367,6 +431,31 @@ public class Libreria
 			this.catalogo = nuevosLibros;
 		}
 		return cambio;
+	}
+
+	/**
+	 * Retorna una lista con los libros que pertenecen a la categor√≠a indicada en el
+	 * par√°metro
+	 * 
+	 * @param nombreCategoria El nombre de la categor√≠a de inter√©s
+	 * @return Una lista donde todos los libros pertenecen a la categor√≠a indicada
+	 */
+	public ArrayList<Libro> darLibros(String nombreCategoria)
+	{
+		boolean encontreCategoria = false;
+
+		ArrayList<Libro> seleccionados = new ArrayList<Libro>();
+
+		for (int i = 0; i < categorias.length && !encontreCategoria; i++)
+		{
+			if (categorias[i].darNombre().equals(nombreCategoria))
+			{
+				encontreCategoria = true;
+				seleccionados.addAll(categorias[i].darLibros());
+			}
+		}
+
+		return seleccionados;
 	}
 	
 	/**

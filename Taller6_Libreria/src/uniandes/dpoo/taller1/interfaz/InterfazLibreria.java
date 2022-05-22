@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -217,7 +218,33 @@ public class InterfazLibreria extends JFrame
 	 */
 	public void borrarLibros() 
 	{
-		
+		String nombresAutores = JOptionPane.showInputDialog(this, "Escriba los autores separados por una coma", "Autor1,Autor2");
+		if (nombresAutores != null)
+		{
+			HashMap<String, String> autoresNoExisten = libreria.existenAutores(nombresAutores);
+			
+			if (autoresNoExisten.size() == 0)
+			{
+				int numLibrosEliminados = libreria.eliminarLibros(nombresAutores);
+				String mensaje = "Se elimaron " + Integer.toString(numLibrosEliminados) + " libros";
+				JOptionPane.showMessageDialog(null,mensaje);	
+				
+				panelCategorias.actualizarCategorias(libreria.darCategorias());
+				ArrayList<Libro> librosCategoria = libreria.darCategorias()[0].darLibros();
+				panelLibros.actualizarLibros(librosCategoria);
+			}
+			else 
+			{
+				String mensaje = "Los siguientes autores no existen:" + System.lineSeparator();
+				
+				for (String autores: autoresNoExisten.keySet()) 
+				{
+					mensaje += autores + System.lineSeparator();
+				}
+				
+				JOptionPane.showMessageDialog(null,mensaje);
+			}
+		}
 	}
 	
 	/**
