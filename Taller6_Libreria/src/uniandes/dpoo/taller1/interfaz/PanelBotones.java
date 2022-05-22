@@ -23,6 +23,10 @@ public class PanelBotones extends JPanel implements ActionListener
 	// Constantes
 	// ************************************************************************
 
+	private final static String BORRAR_LIBROS = "BorrarLibro";
+	
+	private final static String RENOMBRAR_CATEGORIAS = "RenombrarCategoria";
+	
 	private final static String BUSCAR_LIBRO = "BuscarLibro";
 
 	private final static String BUSCAR_LIBROS_AUTOR = "BuscarLibrosAutor";
@@ -63,6 +67,8 @@ public class PanelBotones extends JPanel implements ActionListener
 		setBorder(new TitledBorder("Acciones"));
 
 		setLayout(new FlowLayout());
+		agregarBoton(BORRAR_LIBROS, "Borrar libros por autores", "./data/iconos/borrar.png");
+		agregarBoton(RENOMBRAR_CATEGORIAS, "Renombrar categoría", "./data/iconos/renombrar.png");
 		agregarBoton(BUSCAR_LIBRO, "Buscar libro con titulo", "./data/iconos/libros.png");
 		agregarBoton(BUSCAR_LIBROS_AUTOR, "Buscar libros de un autor", "./data/iconos/autor2.png");
 		agregarBoton(BUSCAR_CATEGORIA_AUTOR, "Buscar categorÃ­as autor", "./data/iconos/contenido.png");
@@ -113,7 +119,15 @@ public class PanelBotones extends JPanel implements ActionListener
 	{
 		String comando = e.getActionCommand();
 
-		if (BUSCAR_LIBRO.equals(comando))
+		if (BORRAR_LIBROS.equals(comando))
+		{
+			ventana.borrarLibros();
+		}
+		else if (RENOMBRAR_CATEGORIAS.equals(comando)) 
+		{
+			ventana.renombrarCategoria();
+		}
+		else if (BUSCAR_LIBRO.equals(comando))
 		{
 			ventana.buscarLibro();
 		}

@@ -206,6 +206,59 @@ public class InterfazLibreria extends JFrame
 	}
 
 	/**
+	 * Le pide al usuario los nombres de los autores separados por comas y
+	 * borra los libros de dichos autores.
+	 * 
+	 * Si todos los autores existen, entonces le informa al usuario cuales libros
+	 * se eliminaron.
+	 * 
+	 * Si no existe uno de los autores, entonces no se realiza la operación y se le 
+	 * informa al usuario cuales autores no existen.
+	 */
+	public void borrarLibros() 
+	{
+		
+	}
+	
+	/**
+	 * Le pide al usuario la categoria que desea renombrar..
+	 * 
+	 * Si el nuevo nombre de la categoría es igual a aquel de otra categoría no se
+	 * realiza la operación y se le informa al usuario.
+	 */
+	public void renombrarCategoria()
+	{
+		String nombreCategoria = JOptionPane.showInputDialog(this, "Escriba la categoría que desea renombrar", "categoría");
+		if (nombreCategoria != null)
+		{
+			int posCategoria = libreria.buscarPosCategoria(nombreCategoria);
+			
+			if (posCategoria != -1)
+			{
+				String NuevoNombreCat = JOptionPane.showInputDialog(this, "Escriba el nuevo nombre de la categoría", "nuevo nombre");
+				if (NuevoNombreCat != null)
+				{
+					boolean cambio = libreria.renombrarCategoria(posCategoria, NuevoNombreCat);
+					if (!cambio) 
+					{
+						JOptionPane.showMessageDialog(null,"Ya existe una categoría con el mismo nombre.");
+					}
+					else 
+					{
+						panelCategorias.actualizarCategorias(libreria.darCategorias());
+						ArrayList<Libro> librosCategoria = libreria.darCategorias()[0].darLibros();
+						panelLibros.actualizarLibros(librosCategoria);
+					}
+				}
+			}
+			else 
+			{
+				JOptionPane.showMessageDialog(null,"La categoría no existe.");
+			}
+		}
+	}
+	
+	/**
 	 * Le pide al usuario el tÃ­tulo de un libro y lo busca en la librerÃ­a.
 	 * 
 	 * Si existe un libro, le muestra al usuario la informaciÃ³n del libro en el

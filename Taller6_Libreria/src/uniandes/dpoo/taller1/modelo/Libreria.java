@@ -184,9 +184,7 @@ public class Libreria
 	
 	/**
 	 * Muestra un cuadro de díalogo en el cual informa cuales categorias se
-	 * agregaron cargando los libros
-	 * @param void
-	 * @return void
+	 * agregaron cargando los libros.
 	 */
 	private void mensajeCategoriasAgregadas() {
 		String mensaje = "Las categorias agregadas cargando los libros fueron:" + System.lineSeparator();
@@ -211,7 +209,8 @@ public class Libreria
 		Categoria laCategoria = null;
 		for (int i = 0; i < categorias.length && laCategoria == null; i++)
 		{
-			if (categorias[i].darNombre().equals(nombreCategoria)) {
+			if (categorias[i].darNombre().equals(nombreCategoria)) 
+			{
 				laCategoria = categorias[i];
 				existeCategoria = true;
 			}
@@ -284,6 +283,92 @@ public class Libreria
 		return seleccionados;
 	}
 
+	/**
+	 * Retorna la posición de la categoría ingresada por el usuario en el arreglo
+	 * de la librería.
+	 * 
+	 * Si no se encuentra la categoría, entonces se retorna -1.
+	 * 
+	 * @param nombreCategoria El nombre de la categorÃ­a
+	 * @return La posición de la categoría en el arreglo de la librería
+	 */
+	public int buscarPosCategoria(String nombreCategoria)
+	{
+		int posCategoria = -1;
+		
+		for (int i = 0; i < categorias.length && posCategoria == -1; i++)
+		{
+			if (categorias[i].darNombre().equals(nombreCategoria)) 
+			{
+				posCategoria = i;
+			}
+		}
+		
+		return posCategoria;
+	}
+	
+	/**
+	 * Retorna un booleano indicando si fue posible reenombrar la categoría
+	 * categoria en la posición dada.
+	 * 
+	 * Si existe una categoría con el nuevo nombre de la categoría, entonces
+	 * el renombramiento no se lleva a cabo.
+	 * 
+	 * @param nombreCategoria La posición de la categoría a reenombrar en el arreglo
+	 * de la librería
+	 * @param NuevoNombreCat El nuevo nombre de la categoría
+	 * @return Booleano que indica si fue posible cambiar el nombre de la categoría
+	 */
+	public boolean renombrarCategoria(int posCategoria, String NuevoNombreCat) 
+	{
+		boolean cambio = true;
+		
+		for(Categoria categoria: categorias)
+		{
+			if (categoria.darNombre().equals(NuevoNombreCat)) 
+			{
+				cambio = false;
+			}
+		}
+			
+		if (cambio) 
+		{
+			Categoria viejaCategoria = categorias[posCategoria];
+			String nomViejaCategoria = viejaCategoria.darNombre();
+			boolean FiccionCategoria = viejaCategoria.esFiccion();
+			ArrayList<Libro> librosVijaCategoria = viejaCategoria.darLibros();
+			Categoria nuevaCategoria = new Categoria(NuevoNombreCat, FiccionCategoria);
+			categorias[posCategoria] = nuevaCategoria;
+			
+			ArrayList<Libro> nuevosLibros = new ArrayList<Libro>();
+			
+			for (Libro libroViejo: catalogo) 
+			{
+				String elTitulo = libroViejo.darTitulo();
+				String elAutor = libroViejo.darAutor();
+				double laCalificacion = libroViejo.darCalificacion();
+				Categoria laCategoria = libroViejo.darCategoria();
+				Imagen laPortada = libroViejo.darPortada();
+
+				if (laCategoria.darNombre().equals(nomViejaCategoria))
+				{
+					Libro nuevoLibro = new Libro(elTitulo, elAutor, laCalificacion, nuevaCategoria);
+					nuevoLibro.cambiarPortada(laPortada);
+					nuevosLibros.add(nuevoLibro);
+				}
+				else
+				{
+					Libro nuevoLibro = new Libro(elTitulo, elAutor, laCalificacion, laCategoria);
+					nuevoLibro.cambiarPortada(laPortada);
+					nuevosLibros.add(nuevoLibro);
+				}		
+			}
+			
+			this.catalogo = nuevosLibros;
+		}
+		return cambio;
+	}
+	
 	/**
 	 * Busca un libro a partir de su tÃ­tulo
 	 * 
