@@ -104,7 +104,7 @@ public class InterfazLibreria extends JFrame
 
 		menuArchivo = new JMenu("Archivo");
 		barraMenu.add(menuArchivo);
-
+		
 		// Setting the accelerator:
 		menuAbrir = new JMenuItem("Abrir", KeyEvent.VK_A);
 		menuAbrir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
@@ -166,7 +166,7 @@ public class InterfazLibreria extends JFrame
 	 * @param archivo_libros     El archivo que tiene la información de los libros
 	 */
 	public void cargarArchivos(File archivo_categorias, File archivo_libros)
-	{
+	{	
 		try
 		{
 			libreria = new Libreria(archivo_categorias.getPath(), archivo_libros.getPath());

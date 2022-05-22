@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.swing.JOptionPane;
+
 /**
  * Esta clase agrupa toda la información de una librería: las categorías que se
  * usan para clasificar los libros, y del catálogo de libros.
@@ -31,6 +33,11 @@ public class Libreria
 	 */
 	private ArrayList<Libro> catalogo;
 
+	/**
+	 * Una lista con las categorias agregadas al cargar el cat�logo
+	 */
+	private ArrayList<Categoria> categoriasAgregadas;
+	
 	// ************************************************************************
 	// Constructores
 	// ************************************************************************
@@ -48,6 +55,7 @@ public class Libreria
 	 */
 	public Libreria(String nombreArchivoCategorias, String nombreArchivoLibros) throws IOException
 	{
+		this.categoriasAgregadas = new ArrayList<Categoria>();
 		this.categorias = cargarCategorias(nombreArchivoCategorias);
 		this.catalogo = cargarCatalogo(nombreArchivoLibros);
 	}
@@ -169,8 +177,26 @@ public class Libreria
 		}
 
 		br.close();
+		mensajeCategoriasAgregadas();
 
 		return libros;
+	}
+	
+	/**
+	 * Muestra un cuadro de d�alogo en el cual informa cuales categorias se
+	 * agregaron cargando los libros
+	 * @param void
+	 * @return void
+	 */
+	private void mensajeCategoriasAgregadas() {
+		String mensaje = "Las categorias agregadas cargando los libros fueron:" + System.lineSeparator();
+		for (Categoria catAgregada: categoriasAgregadas) {
+			String nombreCat = catAgregada.darNombre();
+			String numLibros = Integer.toString(catAgregada.contarLibrosEnCategoria());
+			String infoCat = nombreCat + " con " + numLibros + " libros." + System.lineSeparator();
+			mensaje += infoCat;
+		}
+		JOptionPane.showMessageDialog(null,mensaje);
 	}
 
 	/**
@@ -181,13 +207,43 @@ public class Libreria
 	 */
 	private Categoria buscarCategoria(String nombreCategoria)
 	{
+		boolean existeCategoria = false;
 		Categoria laCategoria = null;
 		for (int i = 0; i < categorias.length && laCategoria == null; i++)
 		{
-			if (categorias[i].darNombre().equals(nombreCategoria))
+			if (categorias[i].darNombre().equals(nombreCategoria)) {
 				laCategoria = categorias[i];
+				existeCategoria = true;
+			}
 		}
+
+		if (!existeCategoria) {
+			laCategoria = agregarCategoria(nombreCategoria);
+		}
+		
 		return laCategoria;
+	}
+	
+	/**
+	 * Agrega una nueva categoría a partir de su nombre con un valor de 
+	 * ficci�n igual a falso
+	 * 
+	 * @param nombreCategoria El nombre de la categoría a agregar
+	 * @return La categoría con el nombre dado
+	 */
+	private Categoria agregarCategoria(String nombreCategoria) {
+		Categoria nuevaCategoria = new Categoria(nombreCategoria, true);
+		Categoria[] nuevoArregloCategorias = new Categoria[categorias.length + 1];
+		for (int i = 0; i < categorias.length; i++)
+		{
+			nuevoArregloCategorias[i] = categorias[i];
+		}
+		
+		nuevoArregloCategorias[categorias.length] = nuevaCategoria;
+		this.categorias = nuevoArregloCategorias;
+		categoriasAgregadas.add(nuevaCategoria);
+		
+		return nuevaCategoria;
 	}
 
 	/**
