@@ -310,9 +310,7 @@ public class Libreria
 			
 			try {
 				for (String autor : listaAutores)
-				{
-					//Susan Sontag,Stephen Rogers Peck
-					
+				{	
 					if (nombreAutor.equals(autor))
 					{
 						ArrayList<Libro> listaLibros = categoria.darLibros();
@@ -342,6 +340,7 @@ public class Libreria
 				mensaje += "Categoría: " + categoria.darNombre() + System.lineSeparator();
 				mensaje += "Calificación: " + String.valueOf(calificacion);
 				JOptionPane.showMessageDialog(null,mensaje);
+				System.out.println(e.getMessage());
 			}
 		}
 		
@@ -373,6 +372,28 @@ public class Libreria
 	}
 	
 	/**
+	 * Retorna si el nuevo nombre de la categoria ya existe.
+	 * 
+	 * 
+	 * @param NuevoNombreCat El nuevo nombre de la categoría.
+	 * @return true si no existía, false si ya existía. 
+	 */
+	private boolean existeCategoria(String NuevoNombreCat)
+	{
+		boolean cambio = true;
+		
+		for(Categoria categoria: categorias)
+		{
+			if (categoria.darNombre().equals(NuevoNombreCat)) 
+			{
+				cambio = false;
+			}
+		}
+		
+		return cambio;
+	}
+	
+	/**
 	 * Retorna un booleano indicando si fue posible reenombrar la categoría
 	 * categoria en la posición dada.
 	 * 
@@ -386,16 +407,8 @@ public class Libreria
 	 */
 	public boolean renombrarCategoria(int posCategoria, String NuevoNombreCat) 
 	{
-		boolean cambio = true;
+		boolean cambio = existeCategoria(NuevoNombreCat);
 		
-		for(Categoria categoria: categorias)
-		{
-			if (categoria.darNombre().equals(NuevoNombreCat)) 
-			{
-				cambio = false;
-			}
-		}
-			
 		if (cambio) 
 		{
 			Categoria viejaCategoria = categorias[posCategoria];
